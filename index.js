@@ -6,8 +6,7 @@ class App extends React.Component {
     render() {
         return (
             <div id="header">
-                <h1>Hello Cat</h1>
-                <p>Are you dog</p>
+                <h1>Hello World</h1>
             </div>
         );
     }
