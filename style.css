@@ -1,3 +1,127 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;800&display=swap");
+@font-face {
+  font-family: "Digital";
+  src: url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.eot");
+  src: url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.eot?#iefix")
+      format("embedded-opentype"),
+    url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.woff2")
+      format("woff2"),
+    url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.woff")
+      format("woff"),
+    url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.ttf")
+      format("truetype"),
+    url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.svg#Digital-7")
+      format("svg");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 16px;
+  font-family: "Rubik";
+}
+
+/*CONTAINERS*/
+#container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
+/*HEADER*/
 #header {
+  text-align: center;
+  font-size: 0.9em;
+  margin: 1.2em;
+}
+
+#box {
   background-color: orange;
+  padding: 8px;
+  max-width: 420px;
+  width: 98%;
+}
+
+/*DISPLAY PANEL*/
+#display-box {
+  background-color: cyan;
+  margin: 10px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 10px;
+  font-family: "Digital";
+  width: 98%;
+  overflow: hidden;
+}
+
+#input {
+  font-size: 1.2em;
+}
+
+#display {
+  font-size: 2.4em;
+}
+
+/*POWER SWITCH*/
+.switch-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-weight: bold;
+  justify-content: flex-end;
+  margin: 20px 10px;
+}
+
+.switch-container p {
+  margin: 5px;
+  font-weight: bold;
+}
+
+.switch {
+  background-color: green;
+  width: 60px;
+  height: 30px;
+  border-radius: 20px;
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+.button {
+  background-color: red;
+  width: 50%;
+  border-radius: 50%;
+}
+
+/*KEYPAD*/
+#keypad {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 400px;
+  width: 100%;
+  justify-content: center;
+  background-color: yellow;
+}
+
+.key {
+  display: flex;
+  max-width: 70px;
+  height: 50px;
+  width: 15vw;
+  margin: 5px;
+  justify-content: center;
+  align-items: center;
+  background-color: grey;
+  cursor: pointer;
+  font-size: 1.2em;
 }
