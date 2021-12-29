@@ -407,7 +407,7 @@ class Display extends React.Component {
         const displayBoxStyle = {
             backgroundColor : "var(--light-gray)"
         }
-        power ? displayBoxStyle.backgroundColor = "var(--light-gray)" : displayBoxStyle.backgroundColor = "var(--dark-gray)";
+        power ? displayBoxStyle.backgroundColor = "var(--light-gray)" : displayBoxStyle.backgroundColor = "var(--semi-dark-gray)";
 
         return (
             <div id="display-box" style={displayBoxStyle}>

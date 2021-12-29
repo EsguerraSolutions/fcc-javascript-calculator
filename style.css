@@ -17,12 +17,13 @@
 :root {
   --white: #ffffff;
   --dark-gray: #545252;
+  --semi-dark-gray: #9e9d9d;
   --dark-blue: #013f73;
   --gray: #c7c1c1;
   --orange: #ffa500;
   --black: #000000;
   --light-gray: #e3dede;
-  --blue: #2980b9;
+  --blue: #4db4f7;
 }
 
 * {
@@ -115,7 +116,6 @@ body {
   background-color: var(--blue);
   width: 50%;
   border-radius: 50%;
-  border: 1px solid black;
 }
 
 /*KEYPAD*/
