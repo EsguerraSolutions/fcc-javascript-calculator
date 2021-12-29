@@ -529,7 +529,11 @@ class Key extends React.Component {
     handleKeyPress(e) {
         /*CHECK POWER*/
         if(this.props.power) {
-            if(e.keyCode === this.props.keyCode1 || e.keyCode === this.props.keyCode2) {
+            if(e.keyCode === this.props.keyCode1 && e.shiftKey === false) {
+                this.handleClick();
+            }
+
+            else if(e.keyCode === this.props.keyCode2 && e.shiftKey === false) {
                 this.handleClick();
             }
 
