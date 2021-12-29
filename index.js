@@ -359,10 +359,12 @@ class App extends React.Component {
     }
 
     computeOutput() {
-        this.setState({
-            result : eval(this.state.input),
-            output : eval(this.state.input)
-        });
+        if(this.state.input != initialState.input) {
+          this.setState({
+              result : eval(this.state.input),
+              output : eval(this.state.input)
+          });
+        }
     }
 
     setPower() {
