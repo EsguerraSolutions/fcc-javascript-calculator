@@ -55,7 +55,7 @@ const keypadArr = [
     },
     {
         keyCode1 : 106,
-        keyCode2 : 56,
+        keyShiftCode : 56,
         keyID : "multiply",
         keyValue : "*",
         keyType : "operator"
@@ -90,7 +90,7 @@ const keypadArr = [
     },
     {
         keyCode1 : 107,
-        keyCode2 : 187,
+        keyShiftCode : 187,
         keyID : "add",
         keyValue : "+",
         keyType : "operator"
@@ -117,13 +117,13 @@ const keypadArr = [
         keyType : "digit"
     },
     {
-        keyCode1 : 57,
+        keyShiftCode : 57,
         keyID : "open-parenthesis",
         keyValue : "(",
         keyType : "parenthesis"
     },
     {
-        keyCode1 : 48,
+        keyShiftCode : 48,
         keyID : "close-parenthesis",
         keyValue : ")",
         keyType : "parenthesis"
@@ -143,7 +143,16 @@ const initialState = {
     result: 0,
     previousKeyType: "",
     decimalLimit: 0,
-    operatorLimit: 0
+    operatorLimit: 0,
+    power : true
+}
+
+const pressedStyle = {
+    boxShadow: "0 0 0 black"
+}
+
+const releasedStyle = {
+    boxShadow: "rgba(0, 0, 0, 1) 2px 2px 2.6px"
 }
 
 class App extends React.Component {
@@ -156,6 +165,7 @@ class App extends React.Component {
         this.setPreviousKeyType = this.setPreviousKeyType.bind(this);
         this.decimalLimiter = this.decimalLimiter.bind(this);
         this.operatorLimiter = this.operatorLimiter.bind(this);
+        this.setPower = this.setPower.bind(this);
     }
 
     handleChangeInput(n,t) {
@@ -355,8 +365,22 @@ class App extends React.Component {
         });
     }
 
+    setPower() {
+        if(this.state.power) {
+            this.setState({
+                power : false,
+                input: String.fromCharCode(160),
+                output: String.fromCharCode(160)
+            });
+        }
+
+        else {
+            this.setState(initialState);
+        }
+    }
+
     render() {
-        const {input,output} = this.state;
+        const {input,output,power} = this.state;
         return (
             <div id="container">
                 <div id="box">
@@ -364,9 +388,9 @@ class App extends React.Component {
                         <h2>Javascript Calculator</h2>
                         <p>Coded by Jonathan</p>
                     </div>
-                    <Display input={input} output={output}/>
-                    <PowerButton/>
-                    <Keypad input={input} handleChangeInput={this.handleChangeInput} handleChangeOutput={this.handleChangeOutput} computeOutput={this.computeOutput} setPreviousKeyType={this.setPreviousKeyType} decimalLimiter={this.decimalLimiter}/>
+                    <Display input={input} output={output} power={power}/>
+                    <PowerButton setPower={this.setPower} power={power}/>
+                    <Keypad input={input} handleChangeInput={this.handleChangeInput} handleChangeOutput={this.handleChangeOutput} computeOutput={this.computeOutput} setPreviousKeyType={this.setPreviousKeyType} decimalLimiter={this.decimalLimiter} power={power}/>
                 </div>
             </div>
         );
@@ -379,9 +403,14 @@ class Display extends React.Component {
     }
 
     render() {
-        const {input,output} = this.props; 
+        const {input,output,power} = this.props; 
+        const displayBoxStyle = {
+            backgroundColor : "var(--light-gray)"
+        }
+        power ? displayBoxStyle.backgroundColor = "var(--light-gray)" : displayBoxStyle.backgroundColor = "var(--dark-gray)";
+
         return (
-            <div id="display-box">
+            <div id="display-box" style={displayBoxStyle}>
                 <div id="input">{input}</div>
                 <div id="display">{output}</div>
             </div>
@@ -392,13 +421,29 @@ class Display extends React.Component {
 class PowerButton extends React.Component {
     constructor(props) {
       super(props);
+      this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        this.props.setPower();
     }
 
     render() { 
+        let powerSwitchStyle = {
+                justifyContent : "flex-end"
+            }
+            
+        if (this.props.power) {
+            powerSwitchStyle.justifyContent = "flex-start"   
+        }
+        
+        else {
+            powerSwitchStyle.justifyContent = "flex-end"        
+        }
       return (
         <div className="switch-container">
             <p>ON</p>
-            <div className="switch">
+            <div className="switch" onClick={this.handleClick} style={powerSwitchStyle}>
                 <div className="button">{String.fromCharCode(160)}</div>
             </div>
             <p>OFF</p>
@@ -413,10 +458,10 @@ class Keypad extends React.Component {
     }
 
     render() {
-        const {input,handleChangeInput,handleChangeOutput,computeOutput,setPreviousKeyType,decimalLimiter} = this.props;
+        const {input,handleChangeInput,handleChangeOutput,computeOutput,setPreviousKeyType,decimalLimiter,power} = this.props;
         return (
             <div id="keypad">
-                {keypadArr.map((key) => <Key keyCode1={key.keyCode1} keyCode2={key.keyCode2} keyID={key.keyID} keyValue={key.keyValue} keyType={key.keyType} input={input} handleChangeInput={handleChangeInput} handleChangeOutput={handleChangeOutput} computeOutput={computeOutput} setPreviousKeyType={setPreviousKeyType} decimalLimiter={decimalLimiter}/>)}
+                {keypadArr.map((key) => <Key keyCode1={key.keyCode1} keyCode2={key.keyCode2} keyShiftCode={key.keyShiftCode} keyID={key.keyID} keyValue={key.keyValue} keyType={key.keyType} input={input} handleChangeInput={handleChangeInput} handleChangeOutput={handleChangeOutput} computeOutput={computeOutput} setPreviousKeyType={setPreviousKeyType} decimalLimiter={decimalLimiter} power={power}/>)}
             </div>
         );
     }
@@ -425,33 +470,79 @@ class Keypad extends React.Component {
 class Key extends React.Component {
     constructor(props) {
         super (props);
+        this.state = {
+            padStyle : releasedStyle
+        }
         this.handleClick = this.handleClick.bind(this);
+        this.pressPad = this.pressPad.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
+    }
+    componentDidMount() {
+        document.addEventListener("keydown",this.handleKeyPress);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown",this.handleKeyPress);
     }
 
     handleClick() {
+        /*CHECK POWER*/
+        if(this.props.power) {
         /*IF EQUALS KEY IS PRESSED*/
-        if(this.props.keyValue == "=") {
-            this.props.computeOutput();
-        }
+            if(this.props.keyValue == "=") {
+                this.props.computeOutput();
+            }
 
-        /*IF OTHER KEYS ARE PRESSED*/
-        else {
-            this.props.handleChangeInput(this.props.keyValue,this.props.keyType);
-            this.props.handleChangeOutput(this.props.keyValue,this.props.keyType);
-        }
+            /*IF OTHER KEYS ARE PRESSED*/
+            else {
+                this.props.handleChangeInput(this.props.keyValue,this.props.keyType);
+                this.props.handleChangeOutput(this.props.keyValue,this.props.keyType);
+            }
 
-        /*IF DECIMAL KEY IS PRESSED, INCREMENT DECIMAL LIMIT BY 1*/
-        if(this.props.keyValue == ".") {
-            this.props.decimalLimiter();
+            /*IF DECIMAL KEY IS PRESSED, INCREMENT DECIMAL LIMIT BY 1*/
+            if(this.props.keyValue == ".") {
+                this.props.decimalLimiter();
+            }
         }
-
+        
+        this.pressPad();
+        setTimeout(() => this.pressPad(), 100);
         this.props.setPreviousKeyType(this.props.keyType);
     }
 
+    pressPad() {
+        if(this.state.padStyle.boxShadow === "0 0 0 black") {
+            this.setState({
+                padStyle : releasedStyle
+            });
+        }
+
+        else {
+            this.setState({
+                padStyle : pressedStyle
+            });
+        }
+    }
+
+    handleKeyPress(e) {
+        /*CHECK POWER*/
+        if(this.props.power) {
+            if(e.keyCode === this.props.keyCode1 || e.keyCode === this.props.keyCode2) {
+                this.handleClick();
+            }
+
+            else if(e.keyCode === this.props.keyShiftCode && e.shiftKey) {
+                this.handleClick();
+            }
+        }
+    }
+
+
     render() {
-        const {keyCode1,keyCode2,keyID,keyValue,keyType} = this.props;
+        const {keyID,keyValue} = this.props;
+        const {padStyle} = this.state;
         return (
-            <div className="key" id={keyID} onClick={this.handleClick}>
+            <div className="key" id={keyID} onClick={this.handleClick} style={padStyle}>
                 {keyValue}
             </div>
         );

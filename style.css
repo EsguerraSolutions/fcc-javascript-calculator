@@ -14,6 +14,17 @@
       format("svg");
 }
 
+:root {
+  --white: #ffffff;
+  --dark-gray: #545252;
+  --dark-blue: #013f73;
+  --gray: #c7c1c1;
+  --orange: #ffa500;
+  --black: #000000;
+  --light-gray: #e3dede;
+  --blue: #2980b9;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -23,6 +34,7 @@
 body {
   font-size: 16px;
   font-family: "Rubik";
+  background-color: #5b86e5;
 }
 
 /*CONTAINERS*/
@@ -42,22 +54,23 @@ body {
 }
 
 #box {
-  background-color: orange;
+  background-color: var(--gray);
   padding: 8px;
   max-width: 420px;
   width: 98%;
+  border: 2px solid var(--black);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 /*DISPLAY PANEL*/
 #display-box {
-  background-color: cyan;
+  background-color: var(--light-gray);
   margin: 10px 6px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
   padding: 10px;
-  font-family: "Digital";
   width: 98%;
   overflow: hidden;
 }
@@ -68,6 +81,7 @@ body {
 
 #display {
   font-size: 2.4em;
+  font-family: "Digital";
 }
 
 /*POWER SWITCH*/
@@ -86,21 +100,22 @@ body {
 }
 
 .switch {
-  background-color: green;
+  background-color: var(--dark-gray);
   width: 60px;
   height: 30px;
   border-radius: 20px;
   padding: 5px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: flex-start;
   cursor: pointer;
 }
 
 .button {
-  background-color: red;
+  background-color: var(--blue);
   width: 50%;
   border-radius: 50%;
+  border: 1px solid black;
 }
 
 /*KEYPAD*/
@@ -110,7 +125,6 @@ body {
   max-width: 400px;
   width: 100%;
   justify-content: center;
-  background-color: yellow;
 }
 
 .key {
@@ -121,7 +135,26 @@ body {
   margin: 5px;
   justify-content: center;
   align-items: center;
-  background-color: grey;
+  background-color: var(--dark-gray);
+  color: var(--white);
   cursor: pointer;
-  font-size: 1.2em;
+  font-size: 1.6em;
+  border-radius: 6px;
+}
+
+#equals {
+  background-color: var(--dark-blue);
+}
+
+#backspace,
+#clear {
+  background-color: var(--orange);
+  color: var(--black);
+}
+
+/*FOR MOBILE DEVICES IN LANDSCAPE VIEW*/
+@media (max-height: 400px) {
+  #container {
+    transform: scale(70%);
+  }
 }
